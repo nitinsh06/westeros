@@ -41,7 +41,7 @@ echo "==> ELF Program Headers"
 $READELF -l "$BUILD_DIR/westeros.elf"
 
 echo "==> Creating ESP32 Image..."
-esptool --chip esp32 elf2image "$BUILD_DIR/westeros.elf"
+esptool --chip esp32 elf2image --flash-mode dio --flash-freq 40m --flash-size 4MB "$BUILD_DIR/westeros.elf"
 
 echo "==> Image Info"
 esptool image-info "$BUILD_DIR/westeros.bin"
@@ -55,4 +55,4 @@ echo "BIN : $BUILD_DIR/westeros.bin"
 echo
 echo "Flash:"
 echo "esptool --chip esp32 --port /dev/cu.usbserial-0001 --baud 460800 \\"
-echo "    write-flash 0x10000 $BUILD_DIR/westeros.bin"
+echo "    write-flash 0x1000 $BUILD_DIR/westeros.bin"

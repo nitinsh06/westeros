@@ -2,8 +2,8 @@ ENTRY(_start)
 
 MEMORY
 {
-    FLASH (rx)  : ORIGIN = 0x400D0020, LENGTH = 0x330000 - 0x20
-    DRAM  (rwx) : ORIGIN = 0x3FFB0000, LENGTH = 0x2C200
+    IRAM (rwx) : ORIGIN = 0x40078000, LENGTH = 0x8000
+    DRAM (rw)  : ORIGIN = 0x3FFF0000, LENGTH = 0x10000
 }
 
 SECTIONS
@@ -13,7 +13,7 @@ SECTIONS
         . = ALIGN(4);
         *(.literal)
         . = ALIGN(4);
-    } > FLASH
+    } > IRAM
 
     .text :
     {
@@ -21,7 +21,7 @@ SECTIONS
         *(.text)
         *(.text.*)
         . = ALIGN(4);
-    } > FLASH
+    } > IRAM
 
     .rodata :
     {
@@ -29,34 +29,29 @@ SECTIONS
         *(.rodata)
         *(.rodata.*)
         . = ALIGN(4);
-    } > FLASH
+    } > DRAM
 
     .data :
     {
         . = ALIGN(4);
         _sdata = .;
-
         *(.data)
         *(.data.*)
-
         . = ALIGN(4);
         _edata = .;
-    } > DRAM AT > FLASH
+    } > DRAM
 
     .bss :
     {
         . = ALIGN(4);
         _sbss = .;
-
         *(.bss)
         *(.bss.*)
         *(COMMON)
-
         . = ALIGN(4);
         _ebss = .;
     } > DRAM
 
     _sidata = LOADADDR(.data);
-
     _stack_top = ORIGIN(DRAM) + LENGTH(DRAM);
 }
